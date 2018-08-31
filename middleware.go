@@ -38,7 +38,8 @@ func RequestIDCtx(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		rid := r.Header.Get(http.CanonicalHeaderKey(XRequestID))
 		if rid == "" {
-			rid = uuid.NewV4().String()
+			uui, _ := uuid.NewV4()
+			rid = uui.String()
 		}
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, ContextReqIDKey, rid)
