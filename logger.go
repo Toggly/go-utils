@@ -11,12 +11,21 @@ import (
 
 // StructuredLogger struct
 type StructuredLogger struct {
-	Logger *logging.Logger
-	R      *http.Request
+	Logger   *logging.Logger
+	R        *http.Request
+	Excludes []string
 }
 
 // LogFields type
 type LogFields map[string]interface{}
+
+func contains(list []string, search string) bool {
+	set := make(map[string]bool)
+	for _, v := range list {
+		set[v] = true
+	}
+	return set[search]
+}
 
 // NewLogEntry method
 func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
@@ -44,7 +53,11 @@ func (l *StructuredLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
 
 	entry.Fields = logFields
 
-	l.Logger.Infof("[%s] [START] %s %s - %s, %s", logFields["req_id"], logFields["http_method"], logFields["uri"], logFields["remote_addr"], logFields["user_agent"])
+	if !contains(l.Excludes, r.RequestURI) {
+		l.Logger.Infof("[%s] [START] %s %s - %s, %s", logFields["req_id"], logFields["http_method"], logFields["uri"], logFields["remote_addr"], logFields["user_agent"])
+	} else {
+		logFields["skip"] = true
+	}
 
 	return entry
 }
@@ -57,6 +70,10 @@ type StructuredLoggerEntry struct {
 
 func (l *StructuredLoggerEntry) Write(status, bytes int, elapsed time.Duration) {
 	fields := l.Fields
+
+	if fields["skip"] == true {
+		return
+	}
 
 	fields["resp_status"] = status
 	fields["resp_bytes_length"] = bytes
