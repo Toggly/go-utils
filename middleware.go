@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
-	uuid "github.com/satori/go.uuid"
+	uuid "github.com/toggly/go.uuid"
 )
 
 type contextKey int

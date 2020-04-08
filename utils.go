@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	uuid "github.com/satori/go.uuid"
+	uuid "github.com/toggly/go.uuid"
 )
 
 //GetRealIPAddr gets real IP Addr from request's headers
