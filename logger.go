@@ -68,7 +68,7 @@ type StructuredLoggerEntry struct {
 	Fields LogFields
 }
 
-func (l *StructuredLoggerEntry) Write(status, bytes int, elapsed time.Duration) {
+func (l *StructuredLoggerEntry) Write(status, bytes int, header http.Header, elapsed time.Duration, intr interface{}) {
 	fields := l.Fields
 
 	if fields["skip"] == true {
