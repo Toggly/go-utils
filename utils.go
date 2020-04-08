@@ -3,6 +3,8 @@ package utils
 import (
 	"net/http"
 	"strings"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 //GetRealIPAddr gets real IP Addr from request's headers
@@ -15,4 +17,9 @@ func GetRealIPAddr(r *http.Request) string {
 		return ips[0]
 	}
 	return r.RemoteAddr
+}
+
+// GenerateUUID gets UUID v4 string
+func GenerateUUID() string {
+	return uuid.Must(uuid.NewV4()).String()
 }
