@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"net"
 	"net/http"
 	"strings"
 
@@ -9,14 +10,18 @@ import (
 
 //GetRealIPAddr gets real IP Addr from request's headers
 func GetRealIPAddr(r *http.Request) string {
+
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	userIP := net.ParseIP(ip).String()
+
 	forward := r.Header.Get("X-Forwarded-For")
 	if forward != "" {
 		ips := strings.Split(forward, ", ")
 		// returns the first item is the list
 		// it means that it the first proxies IPAddr
-		return ips[0]
+		userIP = ips[0]
 	}
-	return r.RemoteAddr
+	return userIP
 }
 
 // GenerateUUID gets UUID v4 string
