@@ -8,6 +8,11 @@ import (
 	"github.com/op/go-logging"
 )
 
+const (
+	//ContextLoggerKey key
+	ContextLoggerKey contextKey = iota
+)
+
 // ErrorResponseWithStatus creates {error: message} json body and responds with error code
 func ErrorResponseWithStatus(w http.ResponseWriter, r *http.Request, err error, code int) {
 	render.Status(r, code)
