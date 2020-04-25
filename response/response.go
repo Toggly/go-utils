@@ -8,6 +8,8 @@ import (
 	"github.com/op/go-logging"
 )
 
+type contextKey int
+
 const (
 	//ContextLoggerKey key
 	ContextLoggerKey contextKey = iota
